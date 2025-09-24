@@ -187,3 +187,5 @@ kubectl get svc -n elk kibana
 ![داشبورد Kibana](images/kibana-01.png)
 -------------
 ![داشبورد Kibana](images/kibana-02.png)
+-------------
+![sidecar archive](images/sidecar-container.png)
