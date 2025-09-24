@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: logstash
+  namespace: elk
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: logstash
+  template:
+    metadata:
+      labels:
+        app: logstash
+    spec:
+      containers:
+      - name: logstash
+        image: docker.elastic.co/logstash/logstash:8.11.1
+        volumeMounts:
+          - name: logstash-pipeline
+            mountPath: /usr/share/logstash/pipeline
+          - name: log-data
+            mountPath: /data
+          - name: archive
+            mountPath: /archive
+        env:
+          - name: LS_JAVA_OPTS
+            value: "-Xms512m -Xmx512m"
+
+      - name: archiver
+        image: alpine:3.20
+        command:
+          - /bin/sh
+          - -c
+          - |
+            echo "Archiver sidecar started..."
+            mkdir -p /archive/compressed
+            while true; do
+              for f in /archive/*.json; do
+                [ -f "$f" ] || continue
+                base=$(basename "$f")
+                gzip -c "$f" > "/archive/compressed/$base.gz" && rm -f "$f"
+              done
+              sleep 60
+            done
+        volumeMounts:
+          - name: archive
+            mountPath: /archive
+
+      volumes:
+        - name: logstash-pipeline
+          configMap:
+            name: logstash-config
+            items:
+              - key: logstash.conf
+                path: logstash.conf
+        - name: log-data
+          hostPath:
+            path: /home/docker/data
+            type: Directory
+        - name: archive
+          hostPath:
+            path: /home/docker/data/archive
+            type: Directory

@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: logstash-config
+  namespace: elk
+data:
+  logstash.conf: |
+    input {
+      file {
+        path => "/data/*.json"
+        start_position => "beginning"
+        sincedb_path => "/dev/null"
+
+        codec => multiline {
+          pattern => "^\{"
+          negate => true
+          what => "previous"
+          auto_flush_interval => 1
+        }
+      }
+    }
+
+    filter {
+      json { 
+        source => "message"
+        skip_on_invalid_json => true
+      }
+
+      if ![id] {
+        drop { }
+      }
+
+      mutate {
+        remove_field => ["message", "host", "path", "@version"]
+      }
+    }
+
+    output {
+      elasticsearch {
+        hosts => ["http://elasticsearch:9200"]
+        index => "json-logs-%{+YYYY.MM.dd}"
+      }
+      stdout { codec => rubydebug }
+      file {
+        path => "/archive/logs-%{+YYYY-MM-dd}.json"
+        codec => json_lines
+      }
+    }
