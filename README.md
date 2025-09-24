@@ -88,7 +88,7 @@ kubectl
 
   - وظیفه: فشرده‌سازی لاگ‌های ```JSON``` و ذخیره در ```/archive/compressed```
 
-- حجم‌ها:
+- volume ‌ها:
 
   - ```/usr/share/logstash/pipeline``` → ```pipeline``` از ```ConfigMap```
 
@@ -106,7 +106,7 @@ kubectl
 
   - ```parse JSON```
 
-  - حذف رویدادهای ناقص
+  - حذف هاevent برخی  
 
   - حذف فیلدهای اضافی (```message```, ```host```, ```path```, ```@version```)
 
