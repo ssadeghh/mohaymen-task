@@ -177,7 +177,7 @@ kubectl get svc -n elk kibana
 شما می‌توانید تحلیل و پیاده‌سازی کامل این روش جایگزین را که توسط اینجانب صورت گرفته، در مقاله زیر مشاهده کنید:
 
 * **پیاده‌سازی ELK Stack با Helm:** [The DevOps Engineer's Local Lab: Deploying the ELK Stack on Minikube](https://medium.com/@sadeghliahmadi/the-devops-engineers-local-lab-deploying-the-elk-stack-on-minikube-852f6b61b599)
-این روش، فرآیند deploy، به‌روزرسانی و مدیریت ELK Stack را به شکل سازمان‌یافته‌تر و مقیاس‌پذیرتری انجام می‌دهد.
+- این روش، فرآیند deploy، به‌روزرسانی و مدیریت ELK Stack را به شکل سازمان‌یافته‌تر و مقیاس‌پذیرتری انجام می‌دهد.
 
 ---
 
